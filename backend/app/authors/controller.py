@@ -7,7 +7,7 @@ from ..util.validators import DATE_FORMAT
 from ..extensions import db
 from .author import Author
 
-def list_all_authors() -> Response:
+def list_all_authors() -> list[dict]:
     """ Retrieves all authors from database
 
     Returns:

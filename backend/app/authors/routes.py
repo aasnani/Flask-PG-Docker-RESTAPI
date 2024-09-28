@@ -22,9 +22,9 @@ def list_authors():
         return list_all_authors()
     except Exception as e:
         # logging output for any errors
-        logger.error("GET /author failed with message:", str(e), exc_info=True)
+        logger.error(msg=f"GET /author failed with message: {str(e)}", exc_info=True)
         # standardized response object
-        response = BaseResponse(f"There was a problem getting all the author objects: {str(e)}")
+        response = BaseResponse(message=f"There was a problem getting all the author objects: {str(e)}")
         # 500 error catch-all
         return jsonify(response.toDict()), 500
 
@@ -36,8 +36,8 @@ def create_authors():
             return create_author(request_json=validated_request_json)
 
         except Exception as e:
-            logger.error(f"POST /author failed with message: {str(e)}", exc_info=True)
-            response = BaseResponse(f"There was a problem creating the author object: {str(e)}")
+            logger.error(msg=f"POST /author failed with message: {str(e)}", exc_info=True)
+            response = BaseResponse(message=f"There was a problem creating the author object: {str(e)}")
             return jsonify(response.toDict()), 500
 
 @app.route("/authors/<author_id>", methods=['GET'])
@@ -46,10 +46,10 @@ def get_author_by_id(author_id):
     try:
         # Validations as defined for id path arguments in request URL
         validated_author_id = id_schema.validate(author_id)
-        return get_author(validated_author_id)
+        return get_author(author_id=validated_author_id)
     except Exception as e:
-        logger.error(f"GET /author/{author_id} failed with message: {str(e)}", exc_info=True)
-        response = BaseResponse(f"There was a problem getting the author object with id={author_id}: {str(e)}")
+        logger.error(msg=f"GET /author/{author_id} failed with message: {str(e)}", exc_info=True)
+        response = BaseResponse(message=f"There was a problem getting the author object with id={author_id}: {str(e)}")
         return jsonify(response.toDict()), 500
 
 @app.route("/authors/<author_id>", methods=['PUT'])
@@ -60,8 +60,8 @@ def put_author_by_id(author_id):
         validated_request_json = create_update_author_schema.validate(request.get_json())
         return put_author(author_id=validated_author_id, request_json=validated_request_json)
     except Exception as e:
-        logger.error(f"PUT /author/{author_id} failed with message:", str(e), exc_info=True)
-        response = BaseResponse(f"There was a problem updating the author object with id={author_id}: {str(e)}")
+        logger.error(msg=f"PUT /author/{author_id} failed with message: {str(e)}", exc_info=True)
+        response = BaseResponse(message=f"There was a problem updating the author object with id={author_id}: {str(e)}")
         return jsonify(response.toDict()), 500
     
 @app.route("/authors/<author_id>", methods=['DELETE'])
@@ -69,8 +69,8 @@ def put_author_by_id(author_id):
 def delete_author_by_id(author_id):
     try:
         validated_author_id = id_schema.validate(author_id)
-        return delete_author(validated_author_id)
+        return delete_author(author_id=validated_author_id)
     except Exception as e:
-        logger.error(f"DELETE /author/{author_id} failed with message:", str(e), exc_info=True)
-        response = BaseResponse(f"There was a problem deleting the author object with id={author_id}: {str(e)}")
+        logger.error(msg=f"DELETE /author/{author_id} failed with message: {str(e)}", exc_info=True)
+        response = BaseResponse(message=f"There was a problem deleting the author object with id={author_id}: {str(e)}")
         return jsonify(response.toDict()), 500
