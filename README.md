@@ -35,6 +35,7 @@ pip install -r requirements.txt
 pytest test/
 ```
 
+One thing to note is that one test case is not working properly, as noted in the code in test_books.py with instructions on how to manually test it.
 
 ## Authors
 
