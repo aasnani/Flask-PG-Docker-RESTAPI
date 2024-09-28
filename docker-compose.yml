@@ -1,15 +1,34 @@
 services:
-  postgres:
-    container_name: container-pg
-    build:
-      context: db
+  db:
+    container_name: container-pgdb
+    image: postgres
     hostname: localhost
     ports:
-      - "5432:5432"
+      - "${PG_PORT}:${PG_PORT}"
+    expose:
+      - "${PG_PORT}"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: test_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
+
+  backend:
+    container_name: container-backend
+    build:
+      context: backend
+      args:
+        FLASK_APP: ${FLASK_APP}
+        FLASK_RUN_PORT: ${FLASK_BACKEND_PORT}
+        FLASK_RUN_HOST: ${FLASK_BACKEND_HOST}
+    ports:
+      - "${FLASK_BACKEND_PORT}:${FLASK_BACKEND_PORT}"
+    environment:
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+    restart: on-failure:10
