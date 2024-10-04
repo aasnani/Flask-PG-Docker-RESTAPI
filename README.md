@@ -1,6 +1,4 @@
-# BE Take Home
-
-Take home task for backend engineer position.
+# Dockerized Flask App providing REST API with Postgres Service, tested with Pytest
 
 ## Getting Started
 
